@@ -22,6 +22,19 @@ namespace Snake.SnakeGame
                 Draw(uiChar.Sprite, uiChar.PositionX, uiChar.PositionY);
             }
 
+            Draw(GameState.Snake.Sprite, (int)GameState.Snake.TruncatedPosition.X, (int)GameState.Snake.TruncatedPosition.Y);
+
+            for (int i = 0; i < GameState.Snake.Body.Count; i++)
+            {
+                var body = GameState.Snake.Body[i];
+                Draw(GameState.Snake.Sprite, (int)body.X, (int)body.Y);
+            }
+
+            for (int i = 0; i < GameState.Foods.Count; i++)
+            {
+                Draw(GameState.Foods[i].Sprite, (int)GameState.Foods[i].TruncatedPosition.X, (int)GameState.Foods[i].TruncatedPosition.Y);
+            }
+
             //Draw('@', GameState.CursorX, GameState.CursorY);
         }
     }
