@@ -142,11 +142,11 @@ namespace Snake.SnakeGame
                                 Snake.AllowVelocityChange = false;
                             }
                         }
-                        else if (key == ConsoleKey.Spacebar)
-                        {
-                            Snake.SuspendTailLoss = true;
-                            AddRandomFood();
-                        }
+                        //else if (key == ConsoleKey.Spacebar)
+                        //{
+                        //    Snake.SuspendTailLoss = true;
+                        //    AddRandomFood();
+                        //}
                         else if (key == ConsoleKey.P)
                         {
                             Pause();
@@ -236,10 +236,6 @@ namespace Snake.SnakeGame
             {
                 int x = Random.Next(1, SnakeGame.ScreenX - 1);
                 int y = Random.Next(1, SnakeGame.ScreenY - 1);
-                if (x <= 0 || y <= 0)
-                {
-                    throw new Exception("AddRandomFood pos fail");
-                }
 
                 position = new Vector2(x, y);
                 bool isCollision = false;
@@ -247,13 +243,14 @@ namespace Snake.SnakeGame
                 {
                     isCollision = true;
                 }
-                Snake.Body.ForEach((x) =>
+                foreach(var bodySegment in Snake.Body)
                 {
-                    if (position == x)
+                    if (position == bodySegment)
                     {
                         isCollision = true;
+                        break;
                     }
-                });
+                }
 
                 if (!isCollision)
                 {
