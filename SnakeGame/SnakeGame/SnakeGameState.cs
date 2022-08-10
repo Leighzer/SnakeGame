@@ -10,49 +10,85 @@ namespace Snake.SnakeGame
     public class SnakeGameState : GameState
     {
         public SnakeEntity Snake { get; set; }
+        public List<DeathEntity> DeathEntities { get; set; }
         public List<FoodEntity> Foods { get; set; }
-        public List<SimpleUIElement> UI { get; set; }
+        public List<StringUIElement> MainMenuUI { get; set; }
+        public List<StringUIElement> GameOverMenuUI { get; set; }
         public SnakeGameStatus GameStatus { get; set; }
         public Random Random { get; set; } = new Random();
 
         public SnakeGameState()
         {
-            UI = new List<SimpleUIElement>();
+            GameStatus = SnakeGameStatus.MainMenu;
+            DeathEntities = new List<DeathEntity>();
             for (int i = 0; i < SnakeGame.ScreenX; i++)
             {
                 for (int j = 0; j < SnakeGame.ScreenY; j++)
                 {
                     if ((i == 0 || i == SnakeGame.ScreenX - 1) || (j == 0 || j == SnakeGame.ScreenY - 1))
                     {
-                        UI.Add(new SimpleUIElement()
+                        DeathEntities.Add(new DeathEntity()
                         {
-                            PositionX = i,
-                            PositionY = j,
-                            IsVisible = true,
-                            Layer = 0,
+                            Position = new Vector2(i, j),
                             Sprite = '#'
                         });
                     }
                 }
             }
-            Snake = new SnakeEntity()
+            const string welcomeToSnakeGameByLeighzer = "Welcome to the Snake Game by Leighzer";
+            const string pressTheSpacebarToPlay = "Press the spacebar to play";
+            MainMenuUI = new List<StringUIElement>()
             {
-                Position = new Vector2(SnakeGame.ScreenX / 2, SnakeGame.ScreenY / 2),
-                Velocity = Vector2.UnitX,
-                Direction = SnakeDirection.RIGHT
+                new StringUIElement() // welcome
+                {
+                    PositionX = (SnakeGame.ScreenX / 2) - (welcomeToSnakeGameByLeighzer.Length / 2),
+                    PositionY = (SnakeGame.ScreenY / 2) - 3,
+                    IsVisible = true,
+                    Layer = 0,
+                    Sprites = welcomeToSnakeGameByLeighzer
+                },
+                new StringUIElement() // press btn to play
+                {
+                    PositionX = (SnakeGame.ScreenX / 2) - (pressTheSpacebarToPlay.Length / 2),
+                    PositionY = (SnakeGame.ScreenY / 2) - 1,
+                    IsVisible = true,
+                    Layer = 0,
+                    Sprites = pressTheSpacebarToPlay
+                },
             };
-            Foods = new List<FoodEntity>();
-            AddRandomFood();
-            GameStatus = SnakeGameStatus.Playing;
+            const string gameOver = "Game Over";
+            const string pressTheSpacebarToPlayAgain = "Press the spacebar to play again";
+            GameOverMenuUI = new List<StringUIElement>()
+            {
+                new StringUIElement() // game over
+                {
+                    PositionX = (SnakeGame.ScreenX / 2) - (gameOver.Length / 2),
+                    PositionY = (SnakeGame.ScreenY / 2) - 3,
+                    IsVisible = true,
+                    Layer = 0,
+                    Sprites = gameOver
+                },
+                new StringUIElement() // press btn to play
+                {
+                    PositionX = (SnakeGame.ScreenX / 2) - (pressTheSpacebarToPlayAgain.Length / 2),
+                    PositionY = (SnakeGame.ScreenY / 2) - 1,
+                    IsVisible = true,
+                    Layer = 0,
+                    Sprites = pressTheSpacebarToPlayAgain
+                },
+            };
         }
 
         public override void Tick(ConsoleKeyInfo? keyPressBuffer, double deltaTime)
-        {
+        {   
             ProcessInput(keyPressBuffer);
 
-            Move();
+            if (GameStatus == SnakeGameStatus.Playing)
+            {
+                Move();
 
-            Collide();
+                Collide();
+            }
         }
 
         private void ProcessInput(ConsoleKeyInfo? keyPressBuffer)
@@ -60,37 +96,78 @@ namespace Snake.SnakeGame
             if (keyPressBuffer.HasValue)
             {
                 var key = keyPressBuffer.Value.Key;
-                if (key == ConsoleKey.UpArrow)
+
+                switch (GameStatus)
                 {
-                    if (Snake.Direction != SnakeDirection.DOWN)
-                    {
-                        Snake.Direction = SnakeDirection.UP;
-                        Snake.Velocity = new Vector2(0, -SnakeEntity.Speed);
-                    }
-                }
-                else if (key == ConsoleKey.RightArrow)
-                {
-                    if (Snake.Direction != SnakeDirection.LEFT)
-                    {
-                        Snake.Direction = SnakeDirection.RIGHT;
-                        Snake.Velocity = new Vector2(SnakeEntity.Speed, 0);
-                    }
-                }
-                else if (key == ConsoleKey.LeftArrow)
-                {
-                    if (Snake.Direction != SnakeDirection.RIGHT)
-                    {
-                        Snake.Direction = SnakeDirection.LEFT;
-                        Snake.Velocity = new Vector2(-SnakeEntity.Speed, 0);
-                    }
-                }
-                else if (key == ConsoleKey.DownArrow)
-                {
-                    if (Snake.Direction != SnakeDirection.UP)
-                    {
-                        Snake.Direction = SnakeDirection.DOWN;
-                        Snake.Velocity = new Vector2(0, SnakeEntity.Speed);
-                    }
+                    case SnakeGameStatus.MainMenu:
+                        if (key == ConsoleKey.Spacebar)
+                        {
+                            SetPlaying();
+                        }
+                        break;
+                    case SnakeGameStatus.Playing:
+                        if (key == ConsoleKey.UpArrow)
+                        {
+                            if (Snake.Direction != SnakeDirection.DOWN && Snake.AllowVelocityChange)
+                            {   
+                                Snake.Direction = SnakeDirection.UP;
+                                Snake.Velocity = new Vector2(0, -SnakeEntity.Speed);
+                                Snake.AllowVelocityChange = false;
+                            }
+                        }
+                        else if (key == ConsoleKey.RightArrow)
+                        {
+                            if (Snake.Direction != SnakeDirection.LEFT && Snake.AllowVelocityChange)
+                            {
+                                Snake.Direction = SnakeDirection.RIGHT;
+                                Snake.Velocity = new Vector2(SnakeEntity.Speed, 0);
+                                Snake.AllowVelocityChange = false;
+                            }
+                        }
+                        else if (key == ConsoleKey.LeftArrow)
+                        {
+                            if (Snake.Direction != SnakeDirection.RIGHT && Snake.AllowVelocityChange)
+                            {
+                                Snake.Direction = SnakeDirection.LEFT;
+                                Snake.Velocity = new Vector2(-SnakeEntity.Speed, 0);
+                                Snake.AllowVelocityChange = false;
+                            }
+                        }
+                        else if (key == ConsoleKey.DownArrow)
+                        {
+                            if (Snake.Direction != SnakeDirection.UP && Snake.AllowVelocityChange)
+                            {
+                                Snake.Direction = SnakeDirection.DOWN;
+                                Snake.Velocity = new Vector2(0, SnakeEntity.Speed);
+                                Snake.AllowVelocityChange = false;
+                            }
+                        }
+                        else if (key == ConsoleKey.Spacebar)
+                        {
+                            Snake.SuspendTailLoss = true;
+                            AddRandomFood();
+                        }
+                        else if (key == ConsoleKey.P)
+                        {
+                            Pause();
+                        }
+                        else if (key == ConsoleKey.Escape)
+                        {
+                            SetMainMenu();
+                        }
+                        break;
+                    case SnakeGameStatus.Paused:
+                        if (key == ConsoleKey.P)
+                        {
+                            Unpause();
+                        }
+                        break;
+                    case SnakeGameStatus.GameOver:
+                        if (key == ConsoleKey.Spacebar)
+                        {
+                            SetPlaying();
+                        }
+                        break;
                 }
             }
         }
@@ -115,6 +192,7 @@ namespace Snake.SnakeGame
                     Snake.Body.Insert(0, prevPos);
                 }
                 Snake.SuspendTailLoss = false;
+                Snake.AllowVelocityChange = true;
             }
 
             Foods.ForEach(x => x.Position += x.Velocity);
@@ -126,7 +204,15 @@ namespace Snake.SnakeGame
             {
                 if (Snake.TruncatedPosition == Snake.Body[i])
                 {
-                    GameStatus = SnakeGameStatus.GameOver;
+                    SetGameOver();
+                }
+            }
+
+            for (int i = 0; i < DeathEntities.Count; i++)
+            {
+                if (Snake.TruncatedPosition == DeathEntities[i].TruncatedPosition)
+                {
+                    SetGameOver();
                 }
             }
 
@@ -135,7 +221,7 @@ namespace Snake.SnakeGame
                 var food = Foods[i];
                 if (Snake.TruncatedPosition == food.Position)
                 {
-                    Snake.SuspendTailLoss = true; 
+                    Snake.SuspendTailLoss = true;
                     Foods.RemoveAt(i);
                     AddRandomFood();
                 }
@@ -179,6 +265,39 @@ namespace Snake.SnakeGame
             {
                 Position = position
             });
+        }
+
+        private void SetMainMenu()
+        {
+            GameStatus = SnakeGameStatus.MainMenu;
+        }
+
+        private void SetPlaying()
+        {
+            GameStatus = SnakeGameStatus.Playing;
+            Snake = new SnakeEntity()
+            {
+                Position = new Vector2(SnakeGame.ScreenX / 2, SnakeGame.ScreenY / 2),
+                Velocity = new Vector2(SnakeEntity.Speed,0),
+                Direction = SnakeDirection.RIGHT
+            };
+            Foods = new List<FoodEntity>();
+            AddRandomFood();
+        }
+
+        private void Pause()
+        {
+            GameStatus = SnakeGameStatus.Paused;
+        }
+
+        private void Unpause()
+        {
+            GameStatus = SnakeGameStatus.Playing;
+        }
+
+        private void SetGameOver()
+        {
+            GameStatus = SnakeGameStatus.GameOver;
         }
     }
 }

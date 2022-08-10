@@ -8,6 +8,6 @@ namespace Snake.SnakeGame
 {
     public enum SnakeGameStatus
     {
-        Playing, Paused, GameOver
+        MainMenu, Playing, Paused, GameOver
     }
 }

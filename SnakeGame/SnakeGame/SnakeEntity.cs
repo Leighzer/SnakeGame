@@ -18,6 +18,7 @@ namespace Snake.SnakeGame
                 return new Vector2((int)Position.X, (int)Position.Y);
             }
         }
+        public bool AllowVelocityChange { get; set; }
         public Vector2 Velocity { get; set; }
         public char Sprite { get; set; } = '@';
 

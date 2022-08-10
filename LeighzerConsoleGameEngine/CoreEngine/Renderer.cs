@@ -68,10 +68,13 @@ namespace LeighzerConsoleGameEngine.CoreEngine
         public void WriteBuffer()
         {
             Console.SetCursorPosition(0, 0);
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < FrameBuffer.Length; i++)
             {   
-                Console.WriteLine(FrameBuffer[i]);
+                sb.Append(FrameBuffer[i]);
+                sb.Append(Environment.NewLine);
             }
+            Console.Write(sb.ToString()); // single Console.Write call
 
             // alt render method that could support changing colors between chars - TOO SLOW THOUGH :(
             //for (int i = 0; i < FrameBuffer.Length; i++)
