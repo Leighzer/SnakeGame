@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snake", "SnakeGame\Snake.csproj", "{D1A4DEA2-C89F-46C2-8F52-75FA78488A0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnakeGame", "SnakeGame\SnakeGame.csproj", "{D1A4DEA2-C89F-46C2-8F52-75FA78488A0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeighzerConsoleGameEngine", "LeighzerConsoleGameEngine\LeighzerConsoleGameEngine.csproj", "{7F892411-B711-4FD7-971E-01479DB61BA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeighzerConsoleGameEngine", "LeighzerConsoleGameEngine\LeighzerConsoleGameEngine.csproj", "{7F892411-B711-4FD7-971E-01479DB61BA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

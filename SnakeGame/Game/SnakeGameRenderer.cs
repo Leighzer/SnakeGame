@@ -1,9 +1,6 @@
 ﻿using LeighzerConsoleGameEngine.CoreEngine;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Snake.SnakeGame
+namespace SnakeGame.Game
 {
     public class SnakeGameRenderer : Renderer
     {

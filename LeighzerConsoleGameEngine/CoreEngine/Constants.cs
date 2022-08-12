@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LeighzerConsoleGameEngine.CoreEngine
+﻿namespace LeighzerConsoleGameEngine.CoreEngine
 {
     public class Constants
     {

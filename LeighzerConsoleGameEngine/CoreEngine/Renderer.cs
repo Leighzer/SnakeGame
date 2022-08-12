@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace LeighzerConsoleGameEngine.CoreEngine
@@ -70,7 +69,7 @@ namespace LeighzerConsoleGameEngine.CoreEngine
             Console.SetCursorPosition(0, 0);
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < FrameBuffer.Length; i++)
-            {   
+            {
                 sb.Append(FrameBuffer[i]);
                 sb.Append(Environment.NewLine);
             }

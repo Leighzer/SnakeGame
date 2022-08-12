@@ -1,16 +1,12 @@
-﻿using Snake.SnakeGame;
-using System;
-using System.Diagnostics;
-using System.Text;
-using System.Threading;
+﻿using SnakeGame.Game;
 
-namespace Hasher
+namespace SnakeGame
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            SnakeGame snakeGame = new SnakeGame();
+            SnakeGameEngine snakeGame = new SnakeGameEngine();
 
             snakeGame.Start();
         }

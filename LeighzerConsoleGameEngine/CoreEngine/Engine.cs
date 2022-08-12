@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using System.Threading;
 
 namespace LeighzerConsoleGameEngine.CoreEngine
 {
     public abstract class Engine
-    { 
+    {
         private Stopwatch TickStopWatch { get; set; } // local timer for within tick
         private Stopwatch DeltaStopWatch { get; set; } // timer for time elapsed between game updates
-        private double TickTimeElapsed { get; set; }     
+        private double TickTimeElapsed { get; set; }
         private int TickRate { get; set; } // ticks per second
         private double TickTime { get; set; } // seconds per tick
         private TimeSpan TickTimeSpan { get; set; } // seconds per tick as TimeSpan
@@ -37,7 +34,7 @@ namespace LeighzerConsoleGameEngine.CoreEngine
         }
 
         public void Loop()
-        {   
+        {
             while (IsPlaying)
             {
                 TickStopWatch.Restart();
@@ -56,7 +53,7 @@ namespace LeighzerConsoleGameEngine.CoreEngine
                 Renderer.WriteBuffer();
 
                 // wait if over with update                
-                TickTimeElapsed = TickStopWatch.Elapsed.TotalSeconds;                
+                TickTimeElapsed = TickStopWatch.Elapsed.TotalSeconds;
                 while (TickTimeElapsed < TickTime)
                 {
                     TickTimeElapsed = TickStopWatch.Elapsed.TotalSeconds;

@@ -3,9 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Text;
 
-namespace Snake.SnakeGame
+namespace SnakeGame.Game
 {
     public class SnakeGameState : GameState
     {
@@ -21,11 +20,11 @@ namespace Snake.SnakeGame
         {
             GameStatus = SnakeGameStatus.MainMenu;
             DeathEntities = new List<DeathEntity>();
-            for (int i = 0; i < SnakeGame.ScreenX; i++)
+            for (int i = 0; i < SnakeGameEngine.ScreenX; i++)
             {
-                for (int j = 0; j < SnakeGame.ScreenY; j++)
+                for (int j = 0; j < SnakeGameEngine.ScreenY; j++)
                 {
-                    if ((i == 0 || i == SnakeGame.ScreenX - 1) || (j == 0 || j == SnakeGame.ScreenY - 1))
+                    if (i == 0 || i == SnakeGameEngine.ScreenX - 1 || j == 0 || j == SnakeGameEngine.ScreenY - 1)
                     {
                         DeathEntities.Add(new DeathEntity()
                         {
@@ -41,16 +40,16 @@ namespace Snake.SnakeGame
             {
                 new StringUIElement() // welcome
                 {
-                    PositionX = (SnakeGame.ScreenX / 2) - (welcomeToSnakeGameByLeighzer.Length / 2),
-                    PositionY = (SnakeGame.ScreenY / 2) - 3,
+                    PositionX = SnakeGameEngine.ScreenX / 2 - welcomeToSnakeGameByLeighzer.Length / 2,
+                    PositionY = SnakeGameEngine.ScreenY / 2 - 3,
                     IsVisible = true,
                     Layer = 0,
                     Sprites = welcomeToSnakeGameByLeighzer
                 },
                 new StringUIElement() // press btn to play
                 {
-                    PositionX = (SnakeGame.ScreenX / 2) - (pressTheSpacebarToPlay.Length / 2),
-                    PositionY = (SnakeGame.ScreenY / 2) - 1,
+                    PositionX = SnakeGameEngine.ScreenX / 2 - pressTheSpacebarToPlay.Length / 2,
+                    PositionY = SnakeGameEngine.ScreenY / 2 - 1,
                     IsVisible = true,
                     Layer = 0,
                     Sprites = pressTheSpacebarToPlay
@@ -62,16 +61,16 @@ namespace Snake.SnakeGame
             {
                 new StringUIElement() // game over
                 {
-                    PositionX = (SnakeGame.ScreenX / 2) - (gameOver.Length / 2),
-                    PositionY = (SnakeGame.ScreenY / 2) - 3,
+                    PositionX = SnakeGameEngine.ScreenX / 2 - gameOver.Length / 2,
+                    PositionY = SnakeGameEngine.ScreenY / 2 - 3,
                     IsVisible = true,
                     Layer = 0,
                     Sprites = gameOver
                 },
                 new StringUIElement() // press btn to play
                 {
-                    PositionX = (SnakeGame.ScreenX / 2) - (pressTheSpacebarToPlayAgain.Length / 2),
-                    PositionY = (SnakeGame.ScreenY / 2) - 1,
+                    PositionX = SnakeGameEngine.ScreenX / 2 - pressTheSpacebarToPlayAgain.Length / 2,
+                    PositionY = SnakeGameEngine.ScreenY / 2 - 1,
                     IsVisible = true,
                     Layer = 0,
                     Sprites = pressTheSpacebarToPlayAgain
@@ -80,7 +79,7 @@ namespace Snake.SnakeGame
         }
 
         public override void Tick(ConsoleKeyInfo? keyPressBuffer, double deltaTime)
-        {   
+        {
             ProcessInput(keyPressBuffer);
 
             if (GameStatus == SnakeGameStatus.Playing)
@@ -108,8 +107,8 @@ namespace Snake.SnakeGame
                     case SnakeGameStatus.Playing:
                         if (key == ConsoleKey.UpArrow)
                         {
-                            if (Snake.Direction != SnakeDirection.DOWN && Snake.AllowVelocityChange)
-                            {   
+                            if (Snake.Direction != SnakeDirection.DOWN && Snake.Direction != SnakeDirection.UP && Snake.AllowVelocityChange)
+                            {
                                 Snake.Direction = SnakeDirection.UP;
                                 Snake.Velocity = new Vector2(0, -SnakeEntity.Speed);
                                 Snake.AllowVelocityChange = false;
@@ -117,7 +116,7 @@ namespace Snake.SnakeGame
                         }
                         else if (key == ConsoleKey.RightArrow)
                         {
-                            if (Snake.Direction != SnakeDirection.LEFT && Snake.AllowVelocityChange)
+                            if (Snake.Direction != SnakeDirection.LEFT && Snake.Direction != SnakeDirection.RIGHT && Snake.AllowVelocityChange)
                             {
                                 Snake.Direction = SnakeDirection.RIGHT;
                                 Snake.Velocity = new Vector2(SnakeEntity.Speed, 0);
@@ -126,7 +125,7 @@ namespace Snake.SnakeGame
                         }
                         else if (key == ConsoleKey.LeftArrow)
                         {
-                            if (Snake.Direction != SnakeDirection.RIGHT && Snake.AllowVelocityChange)
+                            if (Snake.Direction != SnakeDirection.RIGHT && Snake.Direction != SnakeDirection.RIGHT && Snake.AllowVelocityChange)
                             {
                                 Snake.Direction = SnakeDirection.LEFT;
                                 Snake.Velocity = new Vector2(-SnakeEntity.Speed, 0);
@@ -135,7 +134,7 @@ namespace Snake.SnakeGame
                         }
                         else if (key == ConsoleKey.DownArrow)
                         {
-                            if (Snake.Direction != SnakeDirection.UP && Snake.AllowVelocityChange)
+                            if (Snake.Direction != SnakeDirection.UP && Snake.Direction != SnakeDirection.DOWN && Snake.AllowVelocityChange)
                             {
                                 Snake.Direction = SnakeDirection.DOWN;
                                 Snake.Velocity = new Vector2(0, SnakeEntity.Speed);
@@ -234,8 +233,8 @@ namespace Snake.SnakeGame
             Vector2 position = new Vector2(-1, -1);
             while (!isPositionFound)
             {
-                int x = Random.Next(1, SnakeGame.ScreenX - 1);
-                int y = Random.Next(1, SnakeGame.ScreenY - 1);
+                int x = Random.Next(1, SnakeGameEngine.ScreenX - 1);
+                int y = Random.Next(1, SnakeGameEngine.ScreenY - 1);
 
                 position = new Vector2(x, y);
                 bool isCollision = false;
@@ -243,7 +242,7 @@ namespace Snake.SnakeGame
                 {
                     isCollision = true;
                 }
-                foreach(var bodySegment in Snake.Body)
+                foreach (var bodySegment in Snake.Body)
                 {
                     if (position == bodySegment)
                     {
@@ -274,8 +273,8 @@ namespace Snake.SnakeGame
             GameStatus = SnakeGameStatus.Playing;
             Snake = new SnakeEntity()
             {
-                Position = new Vector2(SnakeGame.ScreenX / 2, SnakeGame.ScreenY / 2),
-                Velocity = new Vector2(SnakeEntity.Speed,0),
+                Position = new Vector2(SnakeGameEngine.ScreenX / 2, SnakeGameEngine.ScreenY / 2),
+                Velocity = new Vector2(SnakeEntity.Speed, 0),
                 Direction = SnakeDirection.RIGHT
             };
             Foods = new List<FoodEntity>();

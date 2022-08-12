@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Snake.SnakeGame
+namespace SnakeGame.Game
 {
     public class SnakeEntity
     {
@@ -22,7 +18,7 @@ namespace Snake.SnakeGame
         public Vector2 Velocity { get; set; }
         public char Sprite { get; set; } = '@';
 
-        public List<Vector2> Body { get; set; }  = new List<Vector2>();
+        public List<Vector2> Body { get; set; } = new List<Vector2>();
         public bool SuspendTailLoss { get; set; }
         public SnakeDirection Direction { get; set; }
     }

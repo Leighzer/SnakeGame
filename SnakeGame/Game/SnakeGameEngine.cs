@@ -1,11 +1,8 @@
 ﻿using LeighzerConsoleGameEngine.CoreEngine;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Snake.SnakeGame
+namespace SnakeGame.Game
 {
-    public class SnakeGame : Engine
+    public class SnakeGameEngine : Engine
     {
         public const int ScreenX = Constants.ScreenWidths.ClassicScreenX;
         public const int ScreenY = Constants.ScreenWidths.ClassicScreenY;
@@ -14,7 +11,7 @@ namespace Snake.SnakeGame
         protected new SnakeGameState GameState { get { return base.GameState as SnakeGameState; } }
         protected new SnakeGameRenderer Renderer { get { return base.Renderer as SnakeGameRenderer; } }
 
-        public SnakeGame() : base(tickRate:TickRate)
+        public SnakeGameEngine() : base(tickRate: TickRate)
         {
             base.GameState = new SnakeGameState();
             base.Renderer = new SnakeGameRenderer(ScreenX, ScreenY, GameState);
