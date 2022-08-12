@@ -1,2 +1,2 @@
 # SnakeGame
-Console based Snake game in c#.
+Console based snake game and engine written from scratch in c#.
