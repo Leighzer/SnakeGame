@@ -5,12 +5,12 @@ namespace LeighzerConsoleGameEngine.CoreEngine
 {
     public abstract class Engine
     {
-        private Stopwatch TickStopWatch { get; set; } // local timer for within tick
-        private Stopwatch DeltaStopWatch { get; set; } // timer for time elapsed between game updates
-        private double TickTimeElapsed { get; set; }
-        private int TickRate { get; set; } // ticks per second
-        private double TickTime { get; set; } // seconds per tick
-        private TimeSpan TickTimeSpan { get; set; } // seconds per tick as TimeSpan
+        private Stopwatch _tickStopWatch { get; set; } // local timer for within tick
+        private Stopwatch _deltaStopWatch { get; set; } // timer for time elapsed between game updates
+        private double _tickTimeElapsed { get; set; }
+        private int _tickRate { get; set; } // ticks per second
+        private double _tickTime { get; set; } // seconds per tick
+        private TimeSpan _tickTimeSpan { get; set; } // seconds per tick as TimeSpan
         protected bool IsPlaying { get; set; }
         protected InputGatherer InputGatherer { get; set; }
         protected Renderer Renderer { get; set; }
@@ -18,12 +18,12 @@ namespace LeighzerConsoleGameEngine.CoreEngine
 
         public Engine(int tickRate)
         {
-            this.TickStopWatch = new Stopwatch();
-            this.DeltaStopWatch = new Stopwatch();
-            this.TickTimeElapsed = 0;
-            this.TickRate = tickRate;
-            this.TickTime = 1d / tickRate;
-            this.TickTimeSpan = TimeSpan.FromSeconds(this.TickTime);
+            this._tickStopWatch = new Stopwatch();
+            this._deltaStopWatch = new Stopwatch();
+            this._tickTimeElapsed = 0;
+            this._tickRate = tickRate;
+            this._tickTime = 1d / tickRate;
+            this._tickTimeSpan = TimeSpan.FromSeconds(this._tickTime);
             this.IsPlaying = true;
             InputGatherer = new InputGatherer();
         }
@@ -37,15 +37,15 @@ namespace LeighzerConsoleGameEngine.CoreEngine
         {
             while (IsPlaying)
             {
-                TickStopWatch.Restart();
-                TickTimeElapsed = 0;
+                _tickStopWatch.Restart();
+                _tickTimeElapsed = 0;
 
                 // gather input
                 InputGatherer.ClearInput();
                 InputGatherer.TryGatherInput();
                 // update game state from previous state + new input
-                GameState.Tick(InputGatherer.KeyPressBuffer, DeltaStopWatch.Elapsed.TotalSeconds);
-                DeltaStopWatch.Restart();
+                GameState.Tick(InputGatherer.KeyPressBuffer, _deltaStopWatch.Elapsed.TotalSeconds);
+                _deltaStopWatch.Restart();
 
                 Renderer.Clear();
                 // update frame buffer in renderer using gamestate
@@ -53,10 +53,10 @@ namespace LeighzerConsoleGameEngine.CoreEngine
                 Renderer.WriteBuffer();
 
                 // wait if over with update                
-                TickTimeElapsed = TickStopWatch.Elapsed.TotalSeconds;
-                while (TickTimeElapsed < TickTime)
+                _tickTimeElapsed = _tickStopWatch.Elapsed.TotalSeconds;
+                while (_tickTimeElapsed < _tickTime)
                 {
-                    TickTimeElapsed = TickStopWatch.Elapsed.TotalSeconds;
+                    _tickTimeElapsed = _tickStopWatch.Elapsed.TotalSeconds;
                 }
             }
         }
