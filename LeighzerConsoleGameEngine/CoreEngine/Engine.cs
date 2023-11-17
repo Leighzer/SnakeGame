@@ -55,7 +55,7 @@ namespace LeighzerConsoleGameEngine.CoreEngine
                 // wait if over with update                
                 _tickTimeElapsed = _tickStopWatch.Elapsed.TotalSeconds;
                 while (_tickTimeElapsed < _tickTime)
-                {
+                {   
                     _tickTimeElapsed = _tickStopWatch.Elapsed.TotalSeconds;
                 }
             }
